@@ -1,0 +1,67 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block title %}
+    Informations Supplémentaires
+{% endblock title %}
+
+{% block extrastyle %}
+    <!-- Ajoutez ici les liens vers les feuilles de style supplémentaires si nécessaire -->
+{% endblock extrastyle %}
+
+{% block bodyclass %}
+    <!-- Ajoutez ici des classes CSS supplémentaires pour le corps de la page si nécessaire -->
+{% endblock bodyclass %}
+
+{% block content %}
+    <!-- Contenu de la page -->
+    <div class="container mt-5">
+        <h2>Informations Supplémentaires</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <dl class="row">
+                    <dt class="col-sm-4">Nom :</dt>
+                    <dd class="col-sm-8">{{ nom }}</dd>
+
+                    <dt class="col-sm-4">Prénom :</dt>
+                    <dd class="col-sm-8">{{ prenom }}</dd>
+
+                    <dt class="col-sm-4">Téléphone :</dt>
+                    <dd class="col-sm-8">{{ numero_telephone }}</dd>
+
+                    <dt class="col-sm-4">Date et heure d'entrée :</dt>
+                    <dd class="col-sm-8">{{ Date_heure_entree }}</dd>
+
+                    <dt class="col-sm-4">Lieu de visite :</dt>
+                    <dd class="col-sm-8">{{ lieu_visite }}</dd>
+
+                    <dt class="col-sm-4">Numéro de badge :</dt>
+                    <dd class="col-sm-8">{{ numero_badge }}</dd>
+
+                    <dt class="col-sm-4">Référence de pièce :</dt>
+                    <dd class="col-sm-8">{{ reference_piece }}</dd>
+
+                    <dt class="col-sm-4">Motif de visite :</dt>
+                    <dd class="col-sm-8">{{ motif_visite }}</dd>
+
+                    <dt class="col-sm-4">Société :</dt>
+                    <dd class="col-sm-8">{{ societe }}</dd>
+
+                    <dt class="col-sm-4">Type de pièce d'identité :</dt>
+                    <dd class="col-sm-8">{{ type_piece_identite }}</dd>
+                </dl>
+            </div>
+            <div class="col-md-6">
+                {% if photo_url %}
+                    <img src="{{ photo_url }}" alt="Photo" class="img-fluid">
+                {% else %}
+                    <p>Pas de photo disponible</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block extra_scripts %}
+    <!-- Ajoutez ici des scripts supplémentaires si nécessaire -->
+{% endblock extra_scripts %}

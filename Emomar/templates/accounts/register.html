@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><br></br>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"><br></br>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><br></br>
+    <title>Inscription</title><br></br>
+    {% load static %}
+        {% load static %}
+    <link rel="stylesheet" href="{% static 'register.css' %}">
+
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            font-family: 'Bookman Old Style', serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: url('{% static 'dist/img/KOULOUBA.png' %}') no-repeat; /* Couleur de fond de la page */
+            font-family: Arial, Helvetica, sans-serif;
+            height: 100vh;
+            background-size: cover;
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .parent {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .form {
+            position: relative;
+            width: 500px;
+            height: 650px;
+            background: transparent;
+            border: 2px solid rgba(225, 225, 225, 0.5);
+            border-radius: 30px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            transition: height 0.2s ease;
+            color: #ffffff;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 15px;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 16px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 30px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        label {
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            height: 35px;
+            background: #fffffffe;
+            border: none;
+            outline: none;
+            border-radius: 6px;
+            cursor: pointer;
+            color: #000000;
+            font-size: 500;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .parent {
+            height: 100%;
+            width: 100%;
+            background: url('tour.png');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @keyframes borderAnimation {
+            50% {
+                border-color: yellow;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="parent">
+        <div class="form">
+            <h1>INSCRIPTION</h1>
+
+            {% if error_message %}
+                <p class="error">{{ error_message }}</p>
+            {% endif %}
+            
+            <form action="{% url 'register-page' %}" method="post">
+                {% csrf_token %}
+                <label for="fname">Prenom :</label>
+                <input type="text" placeholder="Prenom" name='fname'><br>
+
+                <label for="lname">Nom :</label>
+                <input type="text" placeholder="Nom" name='lname'><br>
+
+                <label for="uname">Nom d'utilisateur :</label>
+                <input type="text" placeholder="Nom d'utilisateur" name='uname'><br>
+
+                <label for="email">Email :</label>
+                <input type="email" placeholder="Email" name='email'><br>
+
+                <label for="pass">Mot de passe :</label>
+                <input type="password" placeholder="Mot de passe" name='pass'><br>
+
+                <button type="submit">S'inscrire</button>
+                <br>
+                <br>
+                <p>Vous avez déjà un compte? <a href="{% url 'login-page' %}">Se Connecter</a></p>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

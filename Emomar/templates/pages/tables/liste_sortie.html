@@ -1,0 +1,131 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block title %} Gestion E | S  {% endblock title %}
+{% block extrastyle %}
+<!-- DataTables -->
+<link rel="stylesheet" href="{% static 'plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+<link rel="stylesheet" href="{% static 'plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+<link rel="stylesheet" href="{% static 'plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
+{% endblock extrastyle %}
+{% block bodyclass %} Gestion E | S {% endblock bodyclass %}
+{% block content %}
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Liste Visiteur</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="{% url 'home' %}">Accueil</a></li>
+              <li class="breadcrumb-item active"><a href="{% url 'Ajouter_sortie' %}">Ajouter Visiteur</a></li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Gestion Entrée | Sortie</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Nom</th>
+                                        <th scope="col">Prénom</th>
+                                        <th scope="col">Date et heure sortie</th>
+                                        <th scope="col">Téléphone</th>
+                                        <th scope="col">Numéro de badge</th>
+                                        <th scope="col">Type de pièce</th>
+                                        <th scope="col">Référence de pièce</th>
+                                        <th scope="col">Société</th>
+                                        <th scope="col">Photo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if sorties %}
+                                    {% for sortie in sorties %}
+                                    <tr>
+                                        <th scope="row">{{ sortie.pk }}</th>
+                                        <td>{{ sortie.enregistrement.nom }}</td>
+                                        <td>{{ sortie.enregistrement.prenom }}</td>
+                                        <td>{{ sortie.Date_heure_sortie }}</td>
+                                        <td>{{ sortie.enregistrement.numero_telephone }}</td>
+                                        <td>{{ sortie.enregistrement.numero_badge }}</td>
+                                        <td>{{ sortie.enregistrement.type_piece_identite }}</td>
+                                        <td>{{ sortie.enregistrement.reference_piece }}</td>
+                                        <td>{{ sortie.enregistrement.societe }}</td>
+                                        <td>
+                                            {% if sortie.enregistrement.photo %}
+                                            <img src="{{ sortie.enregistrement.photo.url }}" alt="Photo" width="70"
+                                                height="70">
+                                            {% else %}
+                                            Pas de photo
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% endif %}
+                                </tbody>
+                            </table>
+
+
+        </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+{% endblock content %}
+{% block extra_scripts %}
+<!-- DataTables  & Plugins -->
+<script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-responsive/js/dataTables.responsive.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/dataTables.buttons.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/buttons.bootstrap4.min.js' %}"></script>
+<script src="{% static 'plugins/jszip/jszip.min.js' %}"></script>
+<script src="{% static 'plugins/pdfmake/pdfmake.min.js' %}"></script>
+<script src="{% static 'plugins/pdfmake/vfs_fonts.js' %}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/buttons.html5.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/buttons.print.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/buttons.colVis.min.js' %}"></script>
+<!-- Page specific script -->
+<script>
+  $(function () {
+    $("#example1").DataTable({
+      "responsive": true, "lengthChange": false, "autoWidth": false,
+      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
+</script>
+{% endblock extra_scripts %}

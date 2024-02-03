@@ -1,0 +1,210 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block title %} Advanced Form Elements {% endblock title %}
+{% block extrastyle %}
+ <!-- daterange picker -->
+ <link rel="stylesheet" href="{% static 'plugins/daterangepicker/daterangepicker.css' %}">
+ <!-- iCheck for checkboxes and radio inputs -->
+ <link rel="stylesheet" href="{% static 'plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
+ <!-- Bootstrap Color Picker -->
+ <link rel="stylesheet" href="{% static 'plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css' %}">
+ <!-- Tempusdominus Bootstrap 4 -->
+ <link rel="stylesheet" href="{% static 'plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css' %}">
+ <!-- Select2 -->
+ <link rel="stylesheet" href="{% static 'plugins/select2/css/select2.min.css' %}">
+ <link rel="stylesheet" href="{% static 'plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css' %}">
+ <!-- Bootstrap4 Duallistbox -->
+ <link rel="stylesheet" href="{% static 'plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css' %}">
+ <!-- BS Stepper -->
+ <link rel="stylesheet" href="{% static 'plugins/bs-stepper/css/bs-stepper.min.css' %}">
+ <!-- dropzonejs -->
+ <link rel="stylesheet" href="{% static 'plugins/dropzone/min/dropzone.min.css' %}">
+{% endblock extrastyle %}
+{% block bodyclass %} hold-transition sidebar-mini {% endblock bodyclass %}
+{% block content %}
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <div class="card">
+        <div class="card-header">Formulaire d'Enregistrement</div>
+        <div class="card-body">
+          <form method="post" id="modification-form" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <h6 class="heading-small text-muted mb-4">Visiteur information</h6>
+                <div class="pl-lg-4">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="form-control-label" for="id_prenom">Prénom</label>
+                                <input type="text" id="id_prenom" name="prenom" class="form-control" placeholder="Prénom" value="{{ enregistrement.prenom }}">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="form-control-label" for="id_nom">Nom</label>
+                                <input type="text" id="id_nom" name="nom" class="form-control" placeholder="Nom" value="{{ enregistrement.nom }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="form-control-label" for="id_numero_telephone">Numero téléphone</label>
+                                <input type="tel" id="id_numero_telephone" name="numero_telephone" class="form-control" placeholder="Numero téléphone" value="{{ enregistrement.numero_telephone }}">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="form-control-label" for="id_Date_heure_entree">Date et heure d'entrée</label>
+                                <input type="datetime-local" id="id_Date_heure_entree" name="Date_heure_entree" class="form-control" value="{{ enregistrement.Date_heure_entree|date:'Y-m-d\TH:i:s' }}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="my-4" />
+                <h6 class="heading-small text-muted mb-4">Information sur son identité</h6>
+                <div class="pl-lg-4">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="form-control-label" for="id_lieu_visite">Lieu de visite</label>
+                                <input type="text" id="id_lieu_visite" name="lieu_visite" class="form-control" placeholder="Lieu de visite" value="{{ enregistrement.lieu_visite }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label class="form-control-label" for="id_numero_badge">Numero de Badge</label>
+                                <input type="text" id="id_numero_badge" name="numero_badge" class="form-control" placeholder="Numero de Badge" value="{{ enregistrement.numero_badge }}">
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label class="form-control-label" for="id_type_piece_identite">Type de pièce d'identité</label>
+                                <select name="type_piece_identite" id="id_type_piece_identite" class="form-control">
+                                    <option value="PI" {% if enregistrement.type_piece_identite == "PI" %}selected{% endif %}>Pièce d'identité</option>
+                                    <option value="PC" {% if enregistrement.type_piece_identite == "PC" %}selected{% endif %}>Permis de conduire</option>
+                                    <option value="PP" {% if enregistrement.type_piece_identite == "PP" %}selected{% endif %}>Passeport</option>
+                                    <option value="CB" {% if enregistrement.type_piece_identite == "CB" %}selected{% endif %}>Carte biometrique</option>
+                                    <option value="CN" {% if enregistrement.type_piece_identite == "CN" %}selected{% endif %}>Carte nina</option>
+                                    <option value="AU" {% if enregistrement.type_piece_identite == "AU" %}selected{% endif %}>Autre</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label class="form-control-label" for="id_reference_piece">Reference de la pièce</label>
+                                <input type="text" id="id_reference_piece" name="reference_piece" class="form-control" placeholder="Reference de la pièce" value="{{ enregistrement.reference_piece }}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pl-lg-4">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="form-control-label" for="id_societe">Société</label>
+                                <input type="text" id="id_societe" name="societe" class="form-control" placeholder="Société" value="{{ enregistrement.societe }}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="my-4" />
+                <h6 class="heading-small text-muted mb-4">Motif de visite</h6>
+                <div class="pl-lg-4">
+                    <div class="form-group">
+                        <label class="form-control-label" for="id_motif_visite">Motif de visite</label>
+                        <textarea rows="4" id="id_motif_visite" name="motif_visite" class="form-control" placeholder="Motif de visite">{{ enregistrement.motif_visite }}</textarea>
+                    </div>
+                </div>
+                <label for="photo">Sélectionnez une photo :</label>
+                <input type="file" name="photo" id="photo" accept="image/*" required value="{{ enregistrement.photo }}">        
+                
+
+                <div class="col-7 text-right">
+                  <input class="btn btn-primary" type="button" value="Modifier" style="font-size: 15px;" onclick="confirmModification()">
+              </div>
+                
+            </form>
+
+            {% if form.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ form.errors }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<script>
+  function confirmModification() {
+      // Afficher la boîte de dialogue de confirmation
+      Swal.fire({
+          title: "Es-tu sûr?",
+          text: "Vous ne pourrez pas revenir en arrière!",
+          icon: "question", // Utilisation de l'icône de question pour le point d'interrogation
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Oui, modifier!"
+      }).then((result) => {
+          // Si l'utilisateur a confirmé, redirigez vers la page de modification
+          if (result.isConfirmed) {
+              // Afficher un message de succès
+              Swal.fire({
+                  title: "Modifié!",
+                  text: "Votre fichier a été modifié.",
+                  icon: "success",
+                  timer: 1000, // Durée d'affichage du message en millisecondes (1 seconde)
+                  showConfirmButton: false // Cacher le bouton "OK" pour éviter la fermeture manuelle
+              });
+              // Ajouter un délai avant de soumettre le formulaire
+              setTimeout(() => {
+                document.getElementById('modification-form').submit();
+              }, 1000); // Délai en millisecondes (1000 ms = 1 seconde)
+          }
+      });
+  }
+</script>
+
+
+
+
+
+{% endblock content %}
+{% block extra_scripts %}
+<!-- jQuery -->
+<!-- Select2 -->
+<script src="{% static 'plugins/select2/js/select2.full.min.js' %}"></script>
+<!-- Bootstrap4 Duallistbox -->
+<script src="{% static 'plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js' %}"></script>
+<!-- InputMask -->
+<script src="{% static 'plugins/moment/moment.min.js' %}"></script>
+<script src="{% static 'plugins/inputmask/jquery.inputmask.min.js' %}"></script>
+<!-- date-range-picker -->
+<script src="{% static 'plugins/daterangepicker/daterangepicker.js' %}"></script>
+<!-- bootstrap color picker -->
+<script src="{% static 'plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js' %}"></script>
+<!-- Bootstrap Switch -->
+<script src="{% static 'plugins/bootstrap-switch/js/bootstrap-switch.min.js' %}"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="{% static 'plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js' %}"></script>
+<!-- BS-Stepper -->
+<script src="{% static 'plugins/bs-stepper/js/bs-stepper.min.js' %}"></script>
+<!-- dropzonejs -->
+<script src="{% static 'plugins/dropzone/min/dropzone.min.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+
+<!-- Page specific script -->
+
+{% endblock extra_scripts %}

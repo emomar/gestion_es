@@ -1,0 +1,191 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block title %} Etree visiteur {% endblock title %}
+
+{% block bodyclass %} Gestion E | S {% endblock bodyclass %}
+
+{% block content %}
+<style>
+    body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Bookman Old Style', serif;
+    background-image: url('{% static 'dist/img/KOULOUBA.png' %}');
+    /* Couleur de fond de la page */
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+    .container {
+        padding-top: 20px;
+    }
+
+    .form-section {
+        background-color: transparent;
+        color: #FFFFFF;
+        border: 2px solid rgba(225, 225, 225, 0.5); /* Couleur de la bordure */
+        border-radius: 30px;
+        padding: 20px;
+        margin-bottom: 20px;
+        backdrop-filter: blur(20px); /* Flou de fond */
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.5); /* Ombre portée */
+        flex-direction: column;
+        justify-content: center;
+        opacity: 10;
+        
+    }
+
+    .form-row {
+        margin-bottom: 15px;
+    }
+    label {
+    font-size: 16px;
+}
+
+    select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 30px;
+    border: none;
+    border-radius: 5px;
+    background-size: cover;
+     
+
+}
+button[type='submit'] {
+    color: #000000;
+    /* Couleur du texte en noir */
+    font-weight: bold;
+    /* Texte en gras */
+}
+
+button:hover {
+    background-color: #30cf65; /* Couleur de fond du bouton au survol */
+}
+
+    
+     .form-row {
+        margin-bottom: 15px;
+    }
+
+
+    /* Couleur pour le bouton "Enregistrer" */
+    .btn-save {
+        background: #495057; /* Gris foncé */
+        color: #FFFFFF; /* Blanc */
+        border: none;
+        font-weight: bold;
+        letter-spacing: 1px;
+        font-size: 18px;
+    }
+</style>
+<div class="container">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-2"></div>
+            <div class="col-md-9">
+                <div class="form-section">
+                    <h2>Formulaire d'enregistrement</h2>
+                    <form action="{% url 'Ajouter_sortie' %}" method="post" class="mx-auto col-md-11 offset-md-1 custom-form" id="myForm">
+                        {% csrf_token %}
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="enregistrement">Enregistrement</label>
+                                <select name="enregistrement" class="form-control" id="enregistrement">
+                                    <option>Choisir un visiteur...</option>
+                                    {% for enregistrement in enregistrements %}
+                                        <option value="{{ enregistrement.EnregistrementId }}">
+                                            {{ forloop.counter }}-{{ enregistrement.nom }}-{{ enregistrement.prenom }}
+                                            - Type de la Piece d'identite:{{enregistrement.type_piece_identite}}
+                                            -Reference de la Piece:{{enregistrement.reference_piece}} Telephone:{{enregistrement.numero_telephone}} Badge N°: {{enregistrement.numero_badge}} Société: {{enregistrement.societe}}
+                                            {% if enregistrement.photo %}
+                                                <img src="{{ enregistrement.photo.url }}" alt="Photo"
+                                                    style="max-width: 50px; max-height: 50px;">
+                                            {% else %}
+                                                Aucune photo disponible
+                                            {% endif %}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="pl-lg-">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="Date_heure_sortie">Date et Heure de Sortie</label>
+                                        <input required name="Date_heure_sortie" type="datetime-local" class="form-control"
+                                            id="Date_heure_sortie">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                            <div class="form-row">
+                                <div class="col-7 text-right">
+                                    <input class="btn btn-primary btn-save" type="button" value="Enregistrer" onclick="confirmSave()">
+                                </div>
+                            </div>
+                                
+                    </form>
+                    
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    
+</div>
+<br>
+  {% endblock content %}
+
+  {% block extra_scripts %}
+    <!-- bs-custom-file-input -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="{% static 'plugins/bootstrap-switch/js/bootstrap-switch.min.js' %}"></script> <!-- Ajout de cette ligne -->
+<script>
+    function confirmSave() {
+        var dateHeureSortieInput = document.getElementById('Date_heure_sortie');
+
+        if (!dateHeureSortieInput || !dateHeureSortieInput.value) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Champ requis',
+                text: 'Veuillez remplir tous les champs obligatoires.'
+            });
+            return;
+        }
+
+        Swal.fire({
+            title: "Voulez-vous ajouter ce visiteur?",
+            showCancelButton: true,
+            confirmButtonText: "Ajouter",
+            cancelButtonText: "Annuler",
+            icon: 'question'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: "Visiteur ajouté!",
+                    icon: 'success',
+                    timer: 1000, // 1 secondes de délai avant la fermeture automatique
+                    showConfirmButton: false // Cacher le bouton "OK" pour éviter la fermeture manuelle
+                });
+                setTimeout(function () {
+                    document.getElementById('myForm').submit();
+                }, 2000); // Ajouter un délai pour laisser le temps à l'utilisateur de voir le message de succès
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                Swal.fire("Ajout annulé", "", "info");
+            }
+        });
+    }
+</script>
+{% endblock extra_scripts %}
+

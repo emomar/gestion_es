@@ -1,0 +1,188 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block title %}
+    Gestion Entrée et Sortie
+{% endblock title %}
+
+{% block extrastyle %}
+    <!-- Ajoutez ici les liens vers les feuilles de style supplémentaires si nécessaire -->
+    <link rel="stylesheet" href="{% static 'plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
+{% endblock extrastyle %}
+
+{% block bodyclass %}
+    hold-transition sidebar-mini
+{% endblock bodyclass %}
+
+{% block content %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Data Tables</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">DataTables</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+        <!-- Main content -->
+        <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">DataTable with default features</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="sort" data-sort="pk">#</th>
+                                            <th scope="col" class="sort" data-sort="nom">Nom</th>
+                                            <th scope="col" class="sort" data-sort="prenom">Prénom</th>
+                                            <th scope="col" class="sort" data-sort="photo">Photo</th>
+                                            <th scope="col">Actions</th> <!-- Nouvelle colonne pour le bouton "Plus d'infos" -->
+                                        </tr>
+                                    </thead>
+                                    <tbody class="list">
+                                        {% if enregistrements %}
+                                            {% for enregistrement in enregistrements %}
+                                            <tr>
+                                                <th scope="row">{{ enregistrement.pk }}</th>
+                                                <td>{{ enregistrement.nom }}</td>
+                                                <td>{{ enregistrement.prenom }}</td>
+                                                <td>
+                                                    {% if enregistrement.photo %}
+                                                        <img src="{{ enregistrement.photo.url }}" alt="Photo" width="70" height="70">
+                                                    {% else %}
+                                                        Pas de photo
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-info btn-sm" onclick="afficherInformationsSupplementaires('{{ enregistrement.EnregistrementId }}')">
+                                                    Plus d'infos
+                                                </button>
+
+                                                </td>
+                                            </tr>
+                                        {% endfor %}    
+                                        {% endif %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+    </div>
+{% endblock content %}
+
+{% block extra_scripts %}
+    <!-- Ajoutez ici des scripts supplémentaires si nécessaire -->
+    <script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-responsive/js/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-buttons/js/dataTables.buttons.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-buttons/js/buttons.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'plugins/jszip/jszip.min.js' %}"></script>
+    <script src="{% static 'plugins/pdfmake/pdfmake.min.js' %}"></script>
+    <script src="{% static 'plugins/pdfmake/vfs_fonts.js' %}"></script>
+    <script src="{% static 'plugins/datatables-buttons/js/buttons.html5.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-buttons/js/buttons.print.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-buttons/js/buttons.colVis.min.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <!-- Ajoutez ce lien avant votre script -->
+   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Page specific script -->
+
+<script>
+function afficherInformationsSupplementaires(enregistrementId) {
+    // Vérifiez si enregistrementId est défini et non vide
+    if (enregistrementId.trim() === '') {
+        console.error('Enregistrement ID est vide ou non défini.');
+        return;
+    }
+
+    console.log('EnregistrementId:', enregistrementId);
+
+    // Faites une requête AJAX pour récupérer les informations supplémentaires
+    $.ajax({
+        url: `/informations_supplementaires/${enregistrementId}/`,
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            // Utilisez SweetAlert pour afficher les informations avec des styles personnalisés
+            Swal.fire({
+                title: 'Informations supplémentaires',
+                html: `<div class="swal-info">
+    <div class="swal-info">
+    <div class="row">
+        <div class="col">
+            <p><span class="swal-label essential">Nom:</span> ${data.nom}</p>
+            <p><span class="swal-label essential">Prénom:</span> ${data.prenom}</p>
+            <p><span class="swal-label essential">Téléphone:</span> ${data.numero_telephone}</p>
+            <p><span class="swal-label essential">Date et heure d'entrée:</span> ${data.Date_heure_entree}</p>
+        </div>
+        <div class="col">
+            <p><span class="swal-label essential">Lieu de visite:</span> ${data.lieu_visite}</p>
+            <p><span class="swal-label essential">Numéro de badge:</span> ${data.numero_badge}</p>
+            <p><span class="swal-label essential">Référence de pièce:</span> ${data.reference_piece}</p>
+            <p><span class="swal-label essential">Motif de visite:</span> ${data.motif_visite}</p>
+        </div>
+        <div class="col">
+            <p><span class="swal-label essential">Société:</span> ${data.societe}</p>
+            <p><span class="swal-label essential">Type de pièce d'identité:</span> ${data.type_piece_identite}</p>
+        </div>
+    </div>
+</div>
+`,
+                icon: 'info',
+                showCloseButton: true,
+                showConfirmButton: false,
+                customClass: {
+                    popup: 'animate__animated animate__fadeInUp animate__faster',
+                },
+            });
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error('Erreur lors de la récupération des informations supplémentaires:', textStatus, errorThrown);
+
+            // Utilisez SweetAlert pour afficher un message d'erreur
+            Swal.fire({
+                title: 'Erreur',
+                text: 'Erreur lors de la récupération des informations supplémentaires. Veuillez réessayer.',
+                icon: 'error',
+                showCloseButton: true,
+                showConfirmButton: false,
+                customClass: {
+                    popup: 'animate__animated animate__fadeInUp animate__faster',
+                },
+            });
+        }
+    });
+}
+</script>
+
+    {% endblock extra_scripts %}

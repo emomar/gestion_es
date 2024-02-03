@@ -1,0 +1,165 @@
+{% load i18n static %}
+<style>
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Bookman Old Style', serif;
+}
+
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-dVewP0/dDgj2Y0l39WqKt7+zxgU5Lz7pFfTf5DpOQqfLEcW9h3pJqVVedzSOz+Ei" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-N7jcvki2i9qCAET1SsZ3Z3t7f43eFsGa0iWNv3QbV1yTp4I+CZCBZFhrvsOdLqxnMHPtTkZaySO6WXOuLzD2PQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+    <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
+
+    {% if app_list %} {% for app in app_list %} {% if app.has_perms and not app.pinned %}
+        <li class="nav-item {% if 'index' in parent %} menu-open {% endif %}">
+            <a class="nav-link {% if app_label != app.label and app.url not in request.path|urlencode  %} collapsed{% endif %}" data-bs-toggle="collapse" data-bs-target="#submenu-{{ app.app_label }}" href="{{ app.url }}">
+                <i class="nav-icon {{ app.icon }}"></i>
+                <p class="text-white font-weight-bold">
+                    {{ app.label|slice:10 }}{% if app.label|length > 10 %}..{% endif %}
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+
+            {% if app.models %}
+                <ul class="nav nav-treeview">
+                    {% for model in app.models %}
+                        {% if model.url %}
+                            <li class="nav-item">
+                                <a class="nav-link {% if 'bootstrap-tables' in segment or model.url in request.path|urlencode %} active {% endif %}" href="{{ model.url }}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>{{ model.label }}</p>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <p>{{ model.label }}</p>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </li>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+
+    {% if not request.user.is_superuser %}
+        <li class="nav-item{% if 'index' in parent %} menu-open{% endif %}">
+            <a href="#" class="nav-link{% if 'index' in parent %} active{% endif %}">
+                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>
+                    Tableau
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{% url 'home' %}" class="nav-link{% if 'home' in segment %} active{% endif %}">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+
+                        <p>Tableau de bord</p>
+                    </a>
+                </li>
+            </ul>
+        
+    {% endif %}
+
+    <li class="nav-item{% if 'forms' in parent %} menu-open{% endif %}">
+        <a href="#" class="nav-link{% if 'forms' in parent %} active{% endif %}">
+            <i class="fas fa-users"></i>
+
+
+            <p>
+                Entrée Visiteur
+                <i class="fas fa-angle-left right"></i>
+            </p>
+        </a>
+        <!-- Ajouter la balise ouvrante et fermante de la liste -->
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="{% url 'Ajouter_visiteur' %}" class="nav-link{% if 'Ajouter_visiteur' in segment %} active{% endif %}">
+                    <i class="fas fa-user-plus nav-icon"></i>
+
+                    <p>Ajouter un visiteur</p>
+                </a>
+            </li>
+        </ul>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="{% url 'liste_visiteur'%}" class="nav-link{% if 'liste_visiteur' in segment %} active{% endif %}">
+                    <i class="fas fa-list nav-icon"></i>
+                    
+                    <p>Liste des Visiteur</p>
+                </a>
+            </li>
+        </ul>
+
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="{% url 'liste_visiteur_jour'%}" class="nav-link{% if 'liste_visiteur_jour' in segment %} active{% endif %}">
+                    <i class="fas fa-info-circle fa-circle"></i>
+
+
+                    <p>Info sur les visiteur</p>
+                    
+                </a>
+            </li>
+        </ul>
+        <!-- Fermez la balise ul ici -->
+    </li>
+
+    <li class="nav-item{% if 'forms' in parent %} menu-open{% endif %}">
+        <a href="#" class="nav-link{% if 'forms' in parent %} active{% endif %}">
+            <i class="fas fal fa-walking"></i>
+
+             
+            <p>
+                Sortie Visiteur
+                <i class="fas fa-angle-left right"></i>
+                <i class="fa-duotone fa-person-walking-dashed-line-arrow-right"></i>
+            </p>
+        </a>
+        <!-- Ajouter la balise ouvrante et fermante de la liste -->
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="{% url 'Ajouter_sortie'%}" class="nav-link{% if 'Ajouter_sortie' in segment %} active{% endif %}">
+                    <i class="fas fa-user-plus nav-icon"></i>
+                    <p>Sortie D'un Visiteur</p>
+                </a>
+            </li>
+        </ul>
+         <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="{% url 'liste_sortie'%}" class="nav-link{% if 'liste_sortie' in segment %} active{% endif %}">
+                    <i class="fas fa-list nav-icon"></i>
+                    <p>Liste de Sortie</p>
+                </a>
+            </li>
+        </ul>
+        
+    </li>
+
+
+    <li class="nav-item">
+        <a href="{% url 'logoutuser' %}" class="nav-link">
+            <i class="fa fa-sign-out-alt nav-icon"></i>
+            <p>Deconnexion</p>
+        </a>
+    </li>
+
+
+
+
+
+    <li class="nav-item">
+        <a target="_blank" href="https://appseed.us/support/" class="nav-link">
+            <i class="fa fa-rocket text-danger nav-icon"></i>
+            <p>INFO</p>
+        </a>
+    </li>
+
+</ul>

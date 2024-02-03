@@ -1,0 +1,400 @@
+{% extends 'layouts/base.html' %} {% load static %} {% block title %} Ajouter | Visiteur {% endblock title %} {% block extrastyle %}
+<!-- daterange picker -->
+<link rel="stylesheet" href="{% static 'plugins/daterangepicker/daterangepicker.css' %}">
+<!-- iCheck for checkboxes and radio inputs -->
+<link rel="stylesheet" href="{% static 'plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
+<!-- Bootstrap Color Picker -->
+<link rel="stylesheet" href="{% static 'plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css' %}">
+<!-- Tempusdominus Bootstrap 4 -->
+<link rel="stylesheet" href="{% static 'plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css' %}">
+<!-- Select2 -->
+<link rel="stylesheet" href="{% static 'plugins/select2/css/select2.min.css' %}">
+<link rel="stylesheet" href="{% static 'plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css' %}">
+<!-- Bootstrap4 Duallistbox -->
+<link rel="stylesheet" href="{% static 'plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css' %}">
+<!-- BS Stepper -->
+<link rel="stylesheet" href="{% static 'plugins/bs-stepper/css/bs-stepper.min.css' %}">
+<!-- dropzonejs -->
+<link rel="stylesheet" href="{% static 'plugins/dropzone/min/dropzone.min.css' %}"> {% endblock extrastyle %} {% block bodyclass %} Gestion E | S {% endblock bodyclass %} {% block content %}
+
+<style>
+    body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Bookman Old Style', serif;
+    background-image: url('{% static 'dist/img/KOULOUBA.png' %}');
+    /* Couleur de fond de la page */
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+    .container {
+        padding-top: 20px;
+    }
+
+    .form-section {
+        background-color: transparent;
+        color: #FFFFFF;
+        border: 2px solid rgba(225, 225, 225, 0.5); /* Couleur de la bordure */
+        border-radius: 30px;
+        padding: 20px;
+        margin-bottom: 20px;
+        backdrop-filter: blur(20px); /* Flou de fond */
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.5); /* Ombre portée */
+        flex-direction: column;
+        justify-content: center;
+        opacity: 10;
+        
+    }
+
+    .form-row {
+        margin-bottom: 15px;
+    }
+    label {
+    font-size: 16px;
+}
+
+    select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 30px;
+    border: none;
+    border-radius: 5px;
+    background-size: cover;
+     
+
+}
+button[type='submit'] {
+    color: #000000;
+    /* Couleur du texte en noir */
+    font-weight: bold;
+    /* Texte en gras */
+}
+
+button:hover {
+    background-color: #30cf65; /* Couleur de fond du bouton au survol */
+}
+
+    
+     .form-row {
+        margin-bottom: 15px;
+    }
+
+
+    /* Couleur pour le bouton "Enregistrer" */
+    .btn-save {
+        background: #495057; /* Gris foncé */
+        color: #FFFFFF; /* Blanc */
+        border: none;
+        font-weight: bold;
+        letter-spacing: 1px;
+        font-size: 18px;
+    }
+</style>
+
+<script src="{% static 'plugins/bootstrap-switch/js/bootstrap-switch.min.js' %}"></script>
+<br>
+<div class="col-xl-8 order-xl-1 offset-xl-3">
+      <div class="card">
+        <div class="card-header">
+          <div class="row align-items-center">
+            <div class="col-8">
+              <h3 class="mb-0">Bienvenue</h3>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+        <form method="post" action="{% url 'Ajouter_visiteur' %}" enctype="multipart/form-data" id="myForm">
+            {% csrf_token %}
+            
+            <h6 class="heading-small text-muted mb-4">Visiteur information</h6>
+            <div class="pl-lg-4">
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="form-group">
+                    <label class="form-control-label" for="prenom">Prénom *</label>
+                    <input type="text" id="prenom" name="prenom" class="form-control" placeholder="prenom" >
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="form-group">
+                    <label class="form-control-label" for="nom">Nom*</label>
+                    <input type="text" id="nom" name="nom" class="form-control" placeholder="nom">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="form-group">
+                    <label class="form-control-label" for="numero_telephone">Numero telephone*</label>
+                    <input type="tel" id="numero_telephone" name="numero_telephone" class="form-control" placeholder="numero telephone" >
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="form-group">
+                    <label class="form-control-label" for="Date_heure_entree">Date et heure d'entree* </label>
+                    <input type="datetime-local" id="Date_heure_entree" name="Date_heure_entree" class="form-control" placeholder="Date et heure d'entree" >
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <hr class="my-4" />
+            <!-- Address -->
+            <h6 class="heading-small text-muted mb-4">Imformation sur son identité*</h6>
+            <div class="pl-lg-4">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="form-control-label" for="lieu_visite" class="form-control" >Lieu de visite*</label>
+                    <select name="lieu_visite" id="lieu_visite" class="form-control">
+                      <option hidden="">Lieu de visite.....</option>
+                      <option>GSSP</option>
+                      <OPtion>Cabinet presidentiel</OPtion>
+                      <OPtion>DAF de la Presidence</OPtion>
+                      <OPtion>Affaire etrangere</OPtion>
+                      <OPtion>Protocole de la république</OPtion>
+                      <OPtion>Chef de l'état-major particulier du président</OPtion>
+                      <option >DFM des Affaires etrangeres</option>
+                    </select>
+                    </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <label class="form-control-label" for="numero_badge">Numero de Badge*</label>
+                    <input type="text" id="numero_badge" name="numero_badge" class="form-control" placeholder="Badge numero" >
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <label class="form-control-label" for="type_piece_identite">Type de piece a fournir*</label>
+                    <select name="type_piece_identite" id="type_piece_identite" class="form-control" >
+                    <option class="form-control" >Type de piece fournie.....</option>
+                    <option value="CIN">Pièce d'identité</option>
+                    <OPtion value="PC">Permis de conduire</OPtion>
+                    <OPtion value="PP">Passeport</OPtion>
+                    <OPtion value="CB">Carte biometrique</OPtion>
+                    <OPtion value="NINA">Carte nina</OPtion>
+                    <OPtion value="AU">Autre</OPtion>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <label class="form-control-label" for="reference_piece">Reference de la piece *</label>
+                    <input type="text" id="reference_piece" name="reference_piece" class="form-control" placeholder="reference piece">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="pl-lg-4">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label class="form-control-label" for="societe">societe</label>
+                      <input type="text" id="societe" name="societe" class="form-control" placeholder="societe"  >
+                    </div>
+                  </div>
+                </div>
+            <hr class="my-4" />
+            <!-- Description -->
+            <h6 class="heading-small text-muted mb-4">Motif de visite</h6>
+            <div class="pl-lg-4">
+              <div class="form-group">
+                <label class="form-control-label" for="motif_visite" >Motif de visite</label>
+                <textarea rows="4"id="motif_visite" name="motif_visite" class="form-control" placeholder="Motif de visite"></textarea>
+              </div>
+            </div>
+
+            <!-- <label for="photo">Sélectionnez une photo *</label>
+            <input type="file" name="photo" id="photo" accept="image/*" required> -->
+            <div style="display: 'flex'; flex-direction: 'column">
+              <div class="">
+                <label class="form-control-label" for="photo">Image du profil:</label>
+                <input
+                  type="file"
+                  id="photo"
+                  name="photo"
+                  accept="image/*"
+                  style="display: none"
+                  required
+                />
+              </div>
+              <div>
+                <button type="button" class="btn btn-primary" id="buttonStart">Capturer la photo</button>
+              </div>
+              <div>
+                <video
+                  autoplay
+                  muted
+                  playsinline
+                  id="videoLive"
+                  style="display: none"
+                ></video>
+              </div>
+              <div>
+                <canvas id="canvas" style="display: none"></canvas>
+                <img id="imagePreview" style="display: none" alt="Captured Image" />
+              </div>
+              <div>
+                <button type="button" class="btn btn-primary" id="buttonCapture" style="display: none">Capturer l'image</button>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="col-7 text-right">
+                <input class="btn btn-primary btn-save" type="button" value="Enregistrer" onclick="confirmSave()">
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+{% endblock content %} {% block extra_scripts %}
+<!-- jQuery -->
+<!-- Select2 -->
+<script src="{% static 'plugins/select2/js/select2.full.min.js' %}"></script>
+<!-- Bootstrap4 Duallistbox -->
+<script src="{% static 'plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js' %}"></script>
+<!-- InputMask -->
+<script src="{% static 'plugins/moment/moment.min.js' %}"></script>
+<script src="{% static 'plugins/inputmask/jquery.inputmask.min.js' %}"></script>
+<!-- date-range-picker -->
+<script src="{% static 'plugins/daterangepicker/daterangepicker.js' %}"></script>
+<!-- bootstrap color picker -->
+<script src="{% static 'plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js' %}"></script>
+<!-- Bootstrap Switch -->
+<script src="{% static 'plugins/bootstrap-switch/js/bootstrap-switch.min.js' %}"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="{% static 'plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js' %}"></script>
+<!-- BS-Stepper -->
+<script src="{% static 'plugins/bs-stepper/js/bs-stepper.min.js' %}"></script>
+<!-- dropzonejs -->
+<script src="{% static 'plugins/dropzone/min/dropzone.min.js' %}"></script>
+ <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<!-- Page specific script -->
+<script>
+  const buttonStart = document.querySelector("#buttonStart");
+  const buttonCapture = document.querySelector("#buttonCapture");
+  const videoLive = document.querySelector("#videoLive");
+  const canvas = document.querySelector("#canvas");
+  const imagePreview = document.querySelector("#imagePreview");
+  const photoInput = document.getElementById('photo');
+
+  async function main() {
+    let stream = null;
+
+    const startVideo = async () => {
+      stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true,
+      });
+      videoLive.srcObject = stream;
+      videoLive.style.display = "block";
+      buttonCapture.style.display = "block";
+      buttonStart.style.display = "none";
+    };
+
+    // Function to convert data URI to Blob
+    function dataURItoBlob(dataURI) {
+        const byteString = atob(dataURI.split(",")[1]);
+        const mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
+        const ab = new ArrayBuffer(byteString.length);
+        const ia = new Uint8Array(ab);
+        for (let i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+        return new Blob([ab], { type: mimeString });
+    }
+
+    const captureImage = () => {
+      if (stream) {
+        const desiredWidth = 502;
+        const desiredHeight = 380;
+
+        canvas.width = desiredWidth;
+        canvas.height = desiredHeight;
+
+        const context = canvas.getContext("2d");
+        context.drawImage(videoLive, 0, 0, desiredWidth, desiredHeight);
+
+        const imageDataURL = canvas.toDataURL("image/png");
+        // Convert data URL to Blob
+        const blob = dataURItoBlob(imageDataURL);
+
+        // Create a File object from the Blob
+        const file = new File([blob], "captured_image.png", { type: "image/png" });
+
+        // Create a new FileList containing the File object
+        const filesList = new DataTransfer();
+        filesList.items.add(file);
+
+        // Assign the FileList to the file input element
+        photoInput.files = filesList.files;
+
+        imagePreview.src = imageDataURL;
+
+        imagePreview.style.display = "block";
+
+        stream.getVideoTracks()[0].stop();
+        videoLive.srcObject = null;
+        videoLive.style.display = "none";
+      } else {
+        console.error("Camera not open.");
+      }
+    };
+
+    buttonStart.addEventListener("click", startVideo);
+    buttonCapture.addEventListener("click", captureImage);
+  }
+
+
+
+  main();
+
+  function confirmSave() {
+      var nomInput = document.getElementById('nom');
+      var prenomInput = document.getElementById('prenom');
+
+      if (!photoInput || !nomInput || !nomInput.value || !prenomInput || !prenomInput.value) {
+          Swal.fire({
+              icon: 'error',
+              title: 'Champ requis',
+              text: 'Veuillez remplir tous les champs obligatoires.'
+          });
+          return;
+      }
+      
+      Swal.fire({
+          title: "Voulez-vous enregistrer les modifications?",
+          showDenyButton: true,
+          showCancelButton: true,
+          confirmButtonText: "Enregistrer",
+          cancelButtonText: "Annuler", // Changement du texte du bouton Annuler
+          denyButtonText: "Ne pas enregistrer"
+      }).then((result) => {
+          if (result.isConfirmed) {
+              Swal.fire({
+                  title: "Enregistré!",
+                  icon: 'success',
+                  timer: 1000, // 3 secondes de délai avant la fermeture automatique
+                  showConfirmButton: false
+              });
+              setTimeout(function () {
+                document.getElementById("myForm").submit();
+              }, 3000);
+          } else if (result.dismiss === Swal.DismissReason.cancel) {
+              Swal.fire("Ajout annulé", "", "info");
+          }
+      });
+  }
+</script>
+
+{% endblock extra_scripts %}

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page de Connexion</title>
+    {% load static %}
+    <!-- Intégration du style CSS directement dans le HTML -->
+  <style>
+
+    * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Bookman Old Style', serif;
+}
+   body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background: url('IMG.png') no-repeat; /* Couleur de fond de la page */
+        font-family: Arial, Helvetica, sans-serif;
+        height: 100vh;
+        background-image: url('{% static 'dist/img/KOULOUBA.png' %}');
+    
+    /* Couleur de fond de la page */
+    height: 100vh;
+}
+.password-container {
+    position: relative;
+}
+
+
+
+.parent {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.form {
+    position: relative;
+    width: 400px;
+    height: 400px;
+    background: transparent;
+    border: 2px solid rgba(225, 225, 225, 0.5); /* Couleur de la bordure */
+    border-radius: 30px;
+    backdrop-filter: blur(20px); /* Flou de fond */
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5); /* Ombre portée */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: height 0.2s ease;
+    color: #ffffff; /* Couleur du texte */
+    
+    
+    transition: opacity 0.4s ease-out, visibility 0s linear 0.4s; /* Délai pour la transition de l'opacité */
+    
+    
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+label {
+    font-size: 16px;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 30px;
+    border: none;
+    border-radius: 5px;
+     
+
+}
+label {
+    font-size: 16px;
+}
+button {
+    width: 100%;
+    height: 35px;
+    background: #fffffffe;
+    border: none;
+    outline: none;
+    border-radius: 6px;
+    cursor: pointer;
+    color: #000000;
+    font-size: 500;
+}
+
+button:hover {
+    background-color: #0056b3; 
+}
+.parent {
+    height: 100%;
+    width: 100%;
+    background: url('tour.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+@keyframes borderAnimation {   
+        50% {
+            border-color: yellow; /* Couleur de la bordure à la moitié de l'animation */
+        }   
+    }
+  </style>
+</head>
+<body>
+    <div class="parent">
+        <div class="form">
+            {% if error_message %}
+    <div>{{ error_message }}</div>
+{% endif %}
+            <h1>CONNEXION</h1>
+            
+            <form action="" method='POST'>
+                {% csrf_token %}
+                <label for="fname">Nom d'utilisateur :</label>
+                <input type="text" placeholder="Entrez votre nom d'utilisateur" name='uname' class="name-input"><br>
+
+                <label for="fname">Mot de passe :</label>
+                <input type="password" placeholder="Entrez votre mot de passe" name='pass' class="password-input"><br>
+                <span class="eye"></span>
+                <button type="submit">Se Connecter</button>
+                
+            </form>
+        </div>
+    </div>
+</body>
+</html>

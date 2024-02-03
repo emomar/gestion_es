@@ -1,0 +1,232 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block title %} Gestion E | S {% endblock title %}
+{% block extrastyle %}
+<!-- DataTables -->
+<link rel="stylesheet" href="{% static 'plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+<link rel="stylesheet" href="{% static 'plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+<link rel="stylesheet" href="{% static 'plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
+{% endblock extrastyle %}
+{% block bodyclass %} Gestion E | S {% endblock bodyclass %}
+{% block content %}
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Liste Entree</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="{% url 'home' %}">Accueil</a></li>
+              <li class="breadcrumb-item active"><a href="{% url 'Ajouter_visiteur' %}">Ajouter un Visiteur</a></li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Gestion Entree | Sortie</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table id="example1" class="table table-bordered table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col" class="sort" data-sort="pk">#</th>
+                        <th scope="col" class="sort" data-sort="nom">Nom</th>
+                        <th scope="col" class="sort" data-sort="prenom">Prénom</th>
+                        <th scope="col" class="sort" data-sort="Date_heure_entree">Date et heure d'entrée</th>
+                        <th scope="col" class="sort" data-sort="numero_telephone">Téléphone</th>
+                        <th scope="col" class="sort" data-sort="lieu_visite">Lieu de visite</th>
+                        <th scope="col" class="sort" data-sort="numero_badge">Numéro de badge</th>
+                        <th scope="col" class="sort" data-sort="type_piece_identite">Type de pièce</th>
+                        <th scope="col" class="sort" data-sort="reference_piece">Référence de pièce</th>
+                        <th scope="col" class="sort" data-sort="societe">Société</th>
+                        <th scope="col" class="sort" data-sort="motif_visite">Motif de visite</th>
+                        <th scope="col" class="sort" data-sort="photo">Photo</th>
+                        <th scope="col" class="sort" data-sort="Modifier">Modifier</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% if enregistrements %} {% for enregistrement in enregistrements %}
+                      <tr>
+                        <th scope="row">{{ enregistrement.pk }}</th>
+                        <td class="budget">{{ enregistrement.nom }}</td>
+                        <td>{{ enregistrement.prenom }}</td>
+                        <td>{{ enregistrement.Date_heure_entree }}</td>
+                        <td>{{ enregistrement.numero_telephone }}</td>
+                        <td>{{ enregistrement.lieu_visite }}</td>
+                        <td>{{ enregistrement.numero_badge }}</td>
+                        <td>{{ enregistrement.type_piece_identite }}</td>
+                        <td>{{ enregistrement.reference_piece }}</td>
+                        <td>{{ enregistrement.societe }}</td>
+                        <td>{{ enregistrement.motif_visite }}</td>
+                        <td>
+                          {% if enregistrement.photo %}
+                          <img src="{{ enregistrement.photo.url }}" alt="Photo" width="70" height="70"> {% else %} Pas de photo {% endif %}
+                        </td>
+                        <td>
+                          <a href="#" onclick="return confirmModification('{{ enregistrement.pk }}', '{% url 'modifier_enregistrement' enregistrement.pk %}')">
+                            <button type="button" class="btn btn-warning">Modifier</button>
+                          </a>
+                        </td>
+                      </tr>
+                      {% endfor %} {% endif %}
+                    </tbody>
+                    
+                  </table>
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        {% for page_num in enregistrements.paginator.page_range %}
+            {% if page_num == enregistrements.number %}
+                <li class="page-item active"><span class="page-link">{{ page_num }}</span></li>
+            {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a></li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</nav>
+
+                </div>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+    
+  </div>
+  {% endblock content %}
+  {% block extra_scripts %}
+  <!-- DataTables & Plugins -->
+  <script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables-responsive/js/dataTables.responsive.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables-buttons/js/dataTables.buttons.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables-buttons/js/buttons.bootstrap4.min.js' %}"></script>
+  <script src="{% static 'plugins/jszip/jszip.min.js' %}"></script>
+  <script src="{% static 'plugins/pdfmake/pdfmake.min.js' %}"></script>
+  <script src="{% static 'plugins/pdfmake/vfs_fonts.js' %}"></script>
+  <script src="{% static 'plugins/datatables-buttons/js/buttons.html5.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables-buttons/js/buttons.print.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables-buttons/js/buttons.colVis.min.js' %}"></script>
+  <!-- Page specific script -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+  <!-- Votre bouton avec l'événement onclick -->
+  <script>
+    function confirmModification(enregistrementId, url) {
+      // Afficher la boîte de dialogue de confirmation
+      Swal.fire({
+        title: "Êtes-vous sûr?",
+        text: "Vous ne pourrez pas revenir en arrière!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Oui, modifier!"
+      }).then((result) => {
+        // Si l'utilisateur a confirmé, redirigez vers la page de modification
+        if (result.isConfirmed) {
+          window.location.href = url;
+        }
+      });
+
+      // Retourne false pour annuler le comportement par défaut du lien
+      return false;
+    }
+  </script>
+<script>
+$(document).ready(function() {
+    var table = $('#example1').DataTable({
+        "language": {
+            // ... Votre configuration de langue ...
+        },
+        "responsive": true,
+        "lengthChange": false,
+        "autoWidth": false,
+        "paging": false,  // Désactiver la pagination
+        "buttons": [{
+            extend: 'copy'
+        }, {
+            extend: 'excel'
+        }, {
+            extend: 'pdfHtml5',
+            orientation: 'landscape',
+            pageSize: 'A3',
+            customize: function(doc) {
+                doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+
+                for (var i = 1; i < doc.content[1].table.body.length; i++) {
+                    var row = doc.content[1].table.body[i];
+
+                    // Vérifiez si la colonne "Photo" existe et a une valeur
+                    if (row && row[12] && typeof row[12].image === 'string' && row[12].image.startsWith('data:image/')) {
+                        // Assurez-vous que row[12].image est une chaîne base64 valide
+                        var base64Image = row[12].image;
+
+                        // Ajoutez l'image à la cellule avec un ajustement de taille
+                        row[12] = {
+                            image: base64Image,
+                            fit: [30, 30]
+                        };
+                    }
+                }
+
+                // Supprimer la colonne "Modifier" du PDF
+                var colCount = doc.content[1].table.body[0].length;
+                for (var i = 0; i < doc.content[1].table.body.length; i++) {
+                    doc.content[1].table.body[i].splice(colCount - 1, 1);
+                }
+            }
+        }, {
+            extend: 'print',
+            exportOptions: {
+                format: {
+                    body: function(data, row, column, node) {
+                        if (column === 12) {
+                            var img = new Image();
+                            img.src = node.innerHTML;
+                            var canvas = document.createElement('canvas');
+                            canvas.width = 30;
+                            canvas.height = 30;
+                            var context = canvas.getContext('2d');
+                            context.drawImage(img, 0, 0, 30, 30);
+                            return canvas.toDataURL('image/png');
+                        }
+                        return data;
+                    }
+                }
+            },
+            customize: function(win) {
+                $(win.document.body).find('table th:last-child, table td:last-child').remove(); // Supprimer la colonne "Modifier" de l'impression
+            }
+        }]
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+});
+
+    </script>
+
+
+
+
+
+    {% endblock extra_scripts %}
