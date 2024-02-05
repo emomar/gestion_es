@@ -17,7 +17,37 @@
 
 
   {% block extrastyle %}{% endblock extrastyle %}
-  
+   <style>
+
+.preloader {
+    position: fixed; /* position fixe pour rester en place même en faisant défiler la page */
+    top: 0;
+    left: 0;
+    width: 100%; /* occuper toute la largeur */
+    height: 100%; /* occuper toute la hauteur */
+    background-color: rgba(255, 255, 255, 0.9); /* couleur de fond semi-transparente */
+    z-index: 9999; /* assure que le préchargeur est au-dessus de tout le contenu */
+    display: flex;
+    justify-content: center; /* centrer horizontalement */
+    align-items: center; /* centrer verticalement */
+}
+
+.animation__shake {
+    animation: shake 0.5s infinite alternate; /* animation shake */
+}
+
+@keyframes shake {
+    from {
+        transform: translate3d(-1px, 0, 0);
+    }
+    to {
+        transform: translate3d(1px, 0, 0);
+    }
+}
+
+
+
+  </style>
 </head>
 <body class="{% block bodyclass %}{% endblock bodyclass %}">
 
@@ -26,8 +56,9 @@
     {% block preloader %}
       <!-- Preloader -->
       <div class="preloader flex-column justify-content-center align-items-center">
-        <img class="animation__shake" src="{% static 'dist/img/embleme.jpg' %}" height="100" width="100">
-      </div>
+    <img class="animation__shake" src="{% static 'dist/img/embleme.jpg' %}" height="100" width="100">
+</div>
+
     {% endblock preloader %}
 
     {% block header %}
